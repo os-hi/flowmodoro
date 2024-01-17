@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import Timer from './components/Timer.vue'
+  import Flowmodoro from './views/Flowmodoro.vue'
 </script>
 
 <template>
   <div class="h-screen w-screen flex justify-center items-center">
-    <Timer/>
+    <Flowmodoro/>
   </div>
 </template>
