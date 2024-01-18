@@ -1,13 +1,14 @@
 <script setup lang="ts">
-  import { ref, computed, onBeforeUnmount } from 'vue';
+  import { ref, onBeforeUnmount, computed } from 'vue';
+  import {useTimerStore} from '../stores/data';
 
-const timerRunning = ref(false);
-const countdownRunning = ref(false);
+// const timerRunning = ref(false);
+// const countdownRunning = ref(false);
  // Initial countdown time in seconds
 const time = ref(0)
 const iTime = ref(0);
-const countdown = ref(10);
 let intervalId:any = null;
+const store = useTimerStore()
 
 const formattedTime = computed(() => {
   const minutes = Math.floor(time.value / 60);
@@ -21,7 +22,7 @@ const countdownFormattedTime = computed(() => {
 });
 
 const startTimer = () => {
-  timerRunning.value = true;
+  store.timerRunning = true;
   intervalId = setInterval(() => {
     time.value++;
   }, 1000);
@@ -29,18 +30,18 @@ const startTimer = () => {
 
 const stopTimer = () => {
   clearInterval(intervalId);
-  timerRunning.value = false;
-  iTime.value = countdown.value;
+  store.timerRunning = false;
+  iTime.value = store.countdown;
   countDown();
 };
 const countDown = () => {
-  countdownRunning.value = true;
+  store.countdownRunning = true;
     intervalId = setInterval(() => {
         if (iTime.value != 0) {
           iTime.value--;
         }
         else {
-          countdownRunning.value = false;
+          store.countdownRunning = false;
           clearInterval(intervalId);
           startTimer();
         }
@@ -56,13 +57,28 @@ onBeforeUnmount(() => {
 
 <template>
 
-    <div class="w-80 h-80 flex flex-col items-center justify-center rounded-full shadow-2xl">
-      <h1 v-if="timerRunning" class="text-8xl font-bold text-white">{{ formattedTime }}</h1>
-      <h1 v-if="countdownRunning" class="text-8xl font-bold text-white">{{ countdownFormattedTime }}</h1>
-      <button @click="startTimer" v-if="!timerRunning" class="text-2xl text-white">Start</button>
-      <button @click="stopTimer" v-if="timerRunning" class="text-2xl text-white">Break</button>
+    <div class="w-96 h-96 flex flex-col items-center justify-center rounded-full shadow-2xl bg-secondary">
+      <h1 v-if="store.timerRunning" class="text-8xl font-bold text-white">{{ formattedTime }}</h1>
+      <h1 v-if="store.countdownRunning" class="text-8xl font-bold text-white">{{ countdownFormattedTime }}</h1>
+      <button @click="startTimer" v-if="!store.timerRunning && !store.countdownRunning" class="text-6xl font-bold text-white">Start</button>
+      <button @click="stopTimer" v-if="store.timerRunning" class="text-2xl text-white">Break</button>
     </div>
   </template>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <style scoped>
   .progress-container {
   width: 450px;
