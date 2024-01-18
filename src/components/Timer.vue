@@ -61,7 +61,7 @@ onBeforeUnmount(() => {
       <h1 v-if="store.timerRunning" class="text-8xl font-bold text-white">{{ formattedTime }}</h1>
       <h1 v-if="store.countdownRunning" class="text-8xl font-bold text-white">{{ countdownFormattedTime }}</h1>
       <button @click="startTimer" v-if="!store.timerRunning && !store.countdownRunning" class="text-6xl font-bold text-white">Start</button>
-      <button @click="stopTimer" v-if="store.timerRunning" class="text-2xl text-white">Break</button>
+      <button @click="stopTimer" v-if="store.timerRunning && !store.countdownRunning" class="text-2xl text-white">Break</button>
     </div>
   </template>
 
